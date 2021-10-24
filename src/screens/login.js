@@ -6,7 +6,11 @@ const CLIENT_ID = process.env.REACT_APP_CLIENT_ID
 const AUTH_ENPOINT = process.env.REACT_APP_AUTH_ENDPOINT
 const REDIRECT_URL = 'http://localhost:3000/login'
 const SPACE_DELIMITER = '%20'
-const SCOPES = ['user-read-currently-playing', 'user-read-playback-state']
+const SCOPES = [
+  'user-read-currently-playing',
+  'user-read-playback-state',
+  'playlist-read-private'
+]
 const SCOPES_URL_PARAM = SCOPES.join(SPACE_DELIMITER)
 
 //TODO: ask Zak if this is the correct syntax for functions
@@ -29,8 +33,12 @@ const Login = props => {
   //After spotify auth get and store params from url
   useEffect(() => {
     if (window.location.hash) {
-      const spotifyAuth = getParamsFromSpotifyAuth(window.location.hash)
-      localStorage.setItem('spotifyAuth', spotifyAuth)
+      const { access_token, token_type, expires_in } = getParamsFromSpotifyAuth(
+        window.location.hash
+      )
+      localStorage.setItem('access_token', access_token)
+      localStorage.setItem('token_type', token_type)
+      localStorage.setItem('expires_in', expires_in)
     }
   })
 
