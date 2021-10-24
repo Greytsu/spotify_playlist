@@ -3,39 +3,49 @@ import {
   Switch,
   Route,
   Link,
-  useHistory,
-} from "react-router-dom";
-import { ThemeProvider } from "styled-components";
-import React, { useEffect, useState } from "react";
-import Navigation from "../components/navigation";
-import Login from "../screens/login";
-import Playlist from "../screens/playlist";
-import GlobalStyle from "./globalStyle";
-import { lightTheme, darkTheme } from "./themes";
-import Profile from "../screens/profile";
+  useHistory
+} from 'react-router-dom'
+import { ThemeProvider } from 'styled-components'
+import React, { useEffect, useState } from 'react'
+import Navigation from '../components/navigation'
+import Login from '../screens/login'
+import Playlist from '../screens/playlist'
+import GlobalStyle from './globalStyle'
+import { lightTheme, darkTheme } from './themes'
+import Profile from '../screens/profile'
+
+const getStoredTheme = () => {
+  const themeName = localStorage.getItem('theme')
+  if (themeName) {
+    return themeName == 'light' ? lightTheme : darkTheme
+  }
+  return lightTheme
+}
 
 const Routes = () => {
-  const [currentTheme, setCurrentTheme] = useState(lightTheme);
-  const [loggedIn, setLoggedIn] = useState(true);
-  const history = useHistory();
+  const [currentTheme, setCurrentTheme] = useState(getStoredTheme())
+  const [loggedIn, setLoggedIn] = useState(true)
+  const history = useHistory()
 
-  //Inverse le thème
+  //Switch between dark and light theme
   const switchTheme = () => {
-    if (currentTheme.name === "light") {
-      setCurrentTheme(darkTheme);
-    } else {
-      setCurrentTheme(lightTheme);
-    }
+    console.log('switching theme')
+    currentTheme.name === 'light'
+      ? setCurrentTheme(darkTheme)
+      : setCurrentTheme(lightTheme)
+  }
 
-    console.log("🚀 current theme : ", currentTheme.name);
-  };
-
-  //Si pas loggé redirection vers login
+  //If not logged redirect to login page
   useEffect(() => {
     if (!loggedIn) {
-      //history.push("/login");
+      history.push('/login')
     }
-  }, [loggedIn]);
+  }, [])
+
+  //Set local storage
+  useEffect(() => {
+    localStorage.setItem('theme', currentTheme.name)
+  }, [currentTheme])
 
   return (
     <div>
@@ -46,13 +56,13 @@ const Routes = () => {
             {loggedIn ? <Navigation themeSwitcher={switchTheme} /> : null}
 
             <Switch>
-              <Route exact path="/login">
+              <Route exact path='/login'>
                 <Login />
               </Route>
-              <Route exact path="/playlists">
+              <Route exact path='/playlists'>
                 <Playlist />
               </Route>
-              <Route exact path="/profile">
+              <Route exact path='/profile'>
                 <Profile />
               </Route>
             </Switch>
@@ -60,7 +70,7 @@ const Routes = () => {
         </Router>
       </ThemeProvider>
     </div>
-  );
-};
+  )
+}
 
-export default Routes;
+export default Routes

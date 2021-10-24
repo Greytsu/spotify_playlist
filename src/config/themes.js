@@ -1,14 +1,16 @@
 const lightTheme = {
   name: 'light',
   primary: '#E4F0E4',
-  secondary: '#16A349',
+  secondary: '#D3DED3',
+  accent: '#18D860',
   font_color: '#262626'
 }
 
 const darkTheme = {
   name: 'dark',
-  primary: '#000000 ',
-  secondary: '#1ED760',
+  primary: '#121212 ',
+  secondary: '#2B2B2A',
+  accent: '#18D860',
   font_color: '#BEBEBE'
 }
 
