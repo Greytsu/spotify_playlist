@@ -9,10 +9,11 @@ import { ThemeProvider } from 'styled-components'
 import React, { useEffect, useState } from 'react'
 import Navigation from '../components/navigation'
 import Login from '../screens/login'
-import Playlist from '../screens/playlist'
+import Playlists from '../screens/playlists'
 import GlobalStyle from './globalStyle'
 import { lightTheme, darkTheme } from './themes'
 import Profile from '../screens/profile'
+import PlaylistDetails from '../screens/playlistDetails'
 
 const getStoredTheme = () => {
   const themeName = localStorage.getItem('theme')
@@ -53,19 +54,21 @@ const Routes = () => {
         <GlobalStyle />
         <Router>
           <div>
-            {loggedIn ? <Navigation themeSwitcher={switchTheme} /> : null}
-
             <Switch>
               <Route exact path='/login'>
                 <Login />
               </Route>
               <Route exact path='/playlists'>
-                <Playlist />
+                <Playlists />
+              </Route>
+              <Route exact path='/playlistsDetails/:id'>
+                <PlaylistDetails />
               </Route>
               <Route exact path='/profile'>
                 <Profile />
               </Route>
             </Switch>
+            {loggedIn ? <Navigation themeSwitcher={switchTheme} /> : null}
           </div>
         </Router>
       </ThemeProvider>
