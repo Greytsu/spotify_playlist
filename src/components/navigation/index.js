@@ -8,6 +8,8 @@ const Navigation = props => {
   const history = useHistory()
   return (
     <Navbar className='navbar'>
+      <NavLink onClick={() => history.push('/Login')}>Login</NavLink>
+      <NavLink onClick={() => props.themeSwitcher()}>Theme</NavLink>
       <a>
         <NavIcon
           src={playlist_icon}
@@ -30,10 +32,12 @@ const Navigation = props => {
   )
 }
 
+//Style-------------------------------------------------------------------------
+
 const NavLink = styled.div`
   margin: 12px;
   cursor: pointer;
-  width: 100%;
+  width: auto;
   text-align: center;
 `
 
