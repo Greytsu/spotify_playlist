@@ -3,15 +3,17 @@ const lightTheme = {
   primary: '#E4F0E4',
   secondary: '#D3DED3',
   accent: '#18D860',
-  font_color: '#262626'
+  font_primary: '#0F0F0F',
+  font_secondary: '#181818'
 }
 
 const darkTheme = {
   name: 'dark',
-  primary: '#121212 ',
-  secondary: '#2B2B2A',
+  primary: '#0F0F0F',
+  secondary: '#181818',
   accent: '#18D860',
-  font_color: '#BEBEBE'
+  font_primary: '#FFFFFF',
+  font_secondary: '#A6A6A6'
 }
 
 export { lightTheme, darkTheme }
