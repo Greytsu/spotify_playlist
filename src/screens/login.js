@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { useHistory } from 'react-router'
 import styled from 'styled-components'
 import SpotifyLogo from '../components/logo'
 
@@ -29,7 +30,14 @@ const getParamsFromSpotifyAuth = hash => {
   return paramsSplit
 }
 
+//Redirect to spotify auth page
+const handleLogin = () => {
+  window.location = `${AUTH_ENPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`
+}
+
 const Login = props => {
+  const history = useHistory()
+
   //After spotify auth get and store params from url
   useEffect(() => {
     if (window.location.hash) {
@@ -39,13 +47,10 @@ const Login = props => {
       localStorage.setItem('access_token', access_token)
       localStorage.setItem('token_type', token_type)
       localStorage.setItem('expires_in', expires_in)
+
+      history.push('/playlists')
     }
   })
-
-  //Redirect to spotify auth page
-  const handleLogin = () => {
-    window.location = `${AUTH_ENPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URL}&scope=${SCOPES_URL_PARAM}&response_type=token&show_dialog=true`
-  }
 
   return (
     <Container>
@@ -56,6 +61,8 @@ const Login = props => {
     </Container>
   )
 }
+
+//Style-------------------------------------------------------------------------
 
 const Container = styled.div`
   display: flex;
