@@ -1,15 +1,21 @@
 import React from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import styled from 'styled-components'
 import playlist_icon from '../../resources/icons/playlist.svg'
 import profile_icon from '../../resources/icons/profile.svg'
+import theme_icon from '../../resources/icons/theme.svg'
 
 const Navigation = props => {
   const history = useHistory()
   return (
     <Navbar className='navbar'>
-      <NavLink onClick={() => history.push('/Login')}>Login</NavLink>
-      <NavLink onClick={() => props.themeSwitcher()}>Theme</NavLink>
+      <a>
+        <NavIcon
+          src={theme_icon}
+          alt='theme'
+          onClick={() => props.themeSwitcher()}
+        />
+      </a>
       <a>
         <NavIcon
           src={playlist_icon}
@@ -25,9 +31,12 @@ const Navigation = props => {
         />
       </a>
 
-      {/* <NavLink onClick={() => history.push('/playlists')}>Playlists</NavLink>
-      <NavLink onClick={() => history.push('/profile')}>Profile</NavLink>
-      <NavLink onClick={() => props.themeSwitcher()}>Theme</NavLink> */}
+      {/* 
+        <NavLink onClick={() => history.push('/')}>Login</NavLink>
+        <NavLink onClick={() => history.push('/playlists')}>Playlists</NavLink>
+        <NavLink onClick={() => history.push('/profile')}>Profile</NavLink>
+        <NavLink onClick={() => props.themeSwitcher()}>Theme</NavLink> 
+      */}
     </Navbar>
   )
 }
@@ -44,6 +53,7 @@ const NavLink = styled.div`
 const Navbar = styled.nav`
   position: fixed;
   bottom: 0;
+  background-color: ${props => props.theme.secondary};
   width: 100%;
   display: flex;
   justify-content: space-around;
