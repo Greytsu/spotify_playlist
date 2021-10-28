@@ -2,7 +2,6 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link,
   useHistory
 } from 'react-router-dom'
 import { ThemeProvider } from 'styled-components'
@@ -15,15 +14,16 @@ import { lightTheme, darkTheme } from './themes'
 import Profile from '../screens/profile'
 import PlaylistDetails from '../screens/playlistDetails'
 
-const getStoredTheme = () => {
-  const themeName = localStorage.getItem('theme')
-  if (themeName) {
-    return themeName == 'light' ? lightTheme : darkTheme
-  }
-  return lightTheme
-}
-
 const Routes = () => {
+  //Get theme from local storage
+  const getStoredTheme = () => {
+    const themeName = localStorage.getItem('theme')
+    if (themeName) {
+      return themeName == 'light' ? lightTheme : darkTheme
+    }
+    return lightTheme
+  }
+
   const [currentTheme, setCurrentTheme] = useState(getStoredTheme())
   const [loggedIn, setLoggedIn] = useState(true)
   const history = useHistory()
@@ -36,14 +36,7 @@ const Routes = () => {
       : setCurrentTheme(lightTheme)
   }
 
-  //If not logged redirect to login page
-  useEffect(() => {
-    if (!loggedIn) {
-      history.push('/login')
-    }
-  }, [])
-
-  //Set local storage
+  //Set theme name to local storage
   useEffect(() => {
     localStorage.setItem('theme', currentTheme.name)
   }, [currentTheme])
@@ -55,17 +48,20 @@ const Routes = () => {
         <Router>
           <div>
             <Switch>
-              <Route exact path='/login'>
-                <Login />
+              <Route exact path='/'>
+                <Login loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
               </Route>
               <Route exact path='/playlists'>
-                <Playlists />
+                <Playlists loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
               </Route>
               <Route exact path='/playlistsDetails/:id'>
-                <PlaylistDetails />
+                <PlaylistDetails
+                  loggedIn={loggedIn}
+                  setLoggedIn={setLoggedIn}
+                />
               </Route>
               <Route exact path='/profile'>
-                <Profile />
+                <Profile loggedIn={loggedIn} setLoggedIn={setLoggedIn} />
               </Route>
             </Switch>
             {loggedIn ? <Navigation themeSwitcher={switchTheme} /> : null}
