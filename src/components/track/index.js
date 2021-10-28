@@ -2,10 +2,9 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Track = props => {
-  console.log(props.track)
   return (
     <Container>
-      <Cover src={props.track.album.images[0].url} />
+      <Cover src={props.track.album?.images[0]?.url} />
       <Details>
         <SongName>{props.track.name}</SongName>
         <Artist>{props.track.artists[0].name}</Artist>

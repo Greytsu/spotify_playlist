@@ -5,9 +5,7 @@ import Loader from '../components/loader'
 import styled from 'styled-components'
 import Track from '../components/track'
 
-const PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/playlists/`
-
-const PlaylistDetails = () => {
+const PlaylistDetails = props => {
   const { id } = useParams()
   const [token, setToken] = useState(
     localStorage.getItem('access_token')
@@ -16,7 +14,23 @@ const PlaylistDetails = () => {
   )
   const [isLoading, setIsLoading] = useState(true)
   const [playlistDetails, setPlaylistDetails] = useState(null)
+  const [error, setError] = useState(false)
   const [tracks, setTracks] = useState({})
+  const PLAYLIST_ENDPOINT = `https://api.spotify.com/v1/playlists/`
+  const disconnect = () => {
+    props.setLoggedIn(false)
+  }
+  console.log('in')
+  if (!props.loggedIn) {
+    history.push('/')
+  }
+
+  //Redirect to login if token empty
+  useEffect(() => {
+    if (token === '') {
+      history.push('/')
+    }
+  }, [])
 
   //Token
   useEffect(() => {
@@ -54,6 +68,8 @@ const PlaylistDetails = () => {
         setTracks(response.data.tracks.items)
       })
       .catch(err => {
+        setIsLoading(false)
+        setError(true)
         console.log(err)
       })
   }
@@ -62,28 +78,61 @@ const PlaylistDetails = () => {
     return <Loader />
   }
 
+  if (error) {
+    return (
+      <div>
+        <p>Error</p>
+        <button onClick={getPlaylist()}>Réessayer</button>
+        <button onClick={disconnect()}>Se reconnecter</button>
+      </div>
+    )
+  }
+
+  if (!isLoading && playlistDetails == null) {
+    return (
+      <div>
+        <p>ERROR</p>
+        <button onClick={getPlaylist()}>Réessayer</button>
+      </div>
+    )
+  }
+
   return (
-    <div>
+    <PlaylistContainer>
       <PlaylistHeader>
-        <Cover src={playlistDetails.images[0].url} />
+        <Cover src={playlistDetails?.images[0]?.url} />
         <PlaylistDescription>
           <PlaylistTitle>{playlistDetails.name}</PlaylistTitle>
           <PlaylistOwner>{playlistDetails.owner.display_name}</PlaylistOwner>
-          <PlaylistTime>{playlistDetails.owner.display_name}</PlaylistTime>
         </PlaylistDescription>
       </PlaylistHeader>
+      <iframe
+        src={'https://open.spotify.com/embed/playlist/' + id}
+        width='100%'
+        height='80'
+        frameBorder='0'
+        allowtransparency='true'
+        allow='encrypted-media'
+      ></iframe>
       <TracksContainer>
         {tracks.map(track => {
           return <Track track={track.track} />
         })}
       </TracksContainer>
-    </div>
+    </PlaylistContainer>
   )
 }
+
+//Style-------------------------------------------------------------------------
+
+const PlaylistContainer = styled.div`
+  padding-bottom: 5.5rem;
+`
 
 const PlaylistHeader = styled.div`
   display: flex;
   height: 10rem;
+  padding-bottom: 1rem;
 `
 
 const Cover = styled.img`

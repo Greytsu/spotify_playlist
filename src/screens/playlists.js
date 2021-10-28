@@ -4,8 +4,6 @@ import styled from 'styled-components'
 import Loader from '../components/loader'
 import { useHistory } from 'react-router'
 
-const PLAYLISTS_ME_ENDPOINT = 'https://api.spotify.com/v1/me/playlists'
-
 const Playlists = props => {
   const [token, setToken] = useState(
     localStorage.getItem('access_token')
@@ -16,6 +14,22 @@ const Playlists = props => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
   const history = useHistory()
+  const PLAYLISTS_ME_ENDPOINT = 'https://api.spotify.com/v1/me/playlists'
+  const disconnect = () => {
+    props.setLoggedIn(false)
+  }
+
+  //If disconnected -> redirect to login
+  if (!props.loggedIn) {
+    history.push('/')
+  }
+
+  //Redirect to login if token empty
+  useEffect(() => {
+    if (token === '') {
+      history.push('/')
+    }
+  }, [])
 
   //Token
   useEffect(() => {
@@ -46,9 +60,8 @@ const Playlists = props => {
         setPlaylists([...response.data.items])
       })
       .catch(err => {
-        setPlaylists({})
-        setError(true)
         setIsLoading(false)
+        setError(true)
         console.log(err)
       })
   }
@@ -57,35 +70,47 @@ const Playlists = props => {
     history.push(`/playlistsDetails/${id}`)
   }
 
-  //TODO: if data error return error
+  if (isLoading) {
+    return <Loader />
+  }
 
   if (error) {
-    return <p>test error</p>
+    return (
+      <div>
+        <p>Error</p>
+        <button onClick={getPlaylists()}>Réessayer</button>
+        <button onClick={disconnect()}>Se reconnecter</button>
+      </div>
+    )
   }
 
   return (
-    <div>
-      <h2>Playlists</h2>
-      {isLoading ? (
-        <Loader />
-      ) : (
-        playlists.map(playlist => {
-          return (
-            <PlaylistContainer onClick={() => handleClick(playlist.id)}>
-              <PlaylistThumbnail src={playlist.images[0]?.url} />
-              <PlaylistDetails>
-                <PlaylistTitle>{playlist.name}</PlaylistTitle>
-                <PlaylistOwner>{playlist.owner.display_name}</PlaylistOwner>
-              </PlaylistDetails>
-            </PlaylistContainer>
-          )
-        })
-      )}
-    </div>
+    <PlaylistsContainer>
+      <Title>Playlists</Title>
+      {playlists.map(playlist => {
+        return (
+          <PlaylistContainer onClick={() => handleClick(playlist.id)}>
+            <PlaylistThumbnail src={playlist.images[0]?.url} />
+            <PlaylistDetails>
+              <PlaylistTitle>{playlist.name}</PlaylistTitle>
+              <PlaylistOwner>{playlist.owner.display_name}</PlaylistOwner>
+            </PlaylistDetails>
+          </PlaylistContainer>
+        )
+      })}
+    </PlaylistsContainer>
   )
 }
 
 //Style-------------------------------------------------------------------------
+
+const Title = styled.h2`
+  margin: 10;
+`
+
+const PlaylistsContainer = styled.div`
+  padding-bottom: 5.5rem;
+`
 
 const PlaylistContainer = styled.div`
   display: flex;
@@ -93,12 +118,15 @@ const PlaylistContainer = styled.div`
   margin: 10px;
   border-radius: 25px;
   height: 5rem;
+  align-items: center;
 `
 
 const PlaylistThumbnail = styled.img`
-  height: auto;
-  width: 5rem;
+  height: 4.5rem;
+  width: 4.5rem;
   object-fit: cover;
+  border-radius: 25px;
+  padding-left: 0.25rem;
 `
 
 const PlaylistDetails = styled.div`
