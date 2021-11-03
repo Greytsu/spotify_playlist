@@ -3,6 +3,9 @@ import axios from 'axios'
 import styled from 'styled-components'
 import Loader from '../components/loader'
 import { useHistory } from 'react-router'
+import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
+import actions from '../actions'
 
 const Playlists = props => {
   const [token, setToken] = useState(
@@ -14,6 +17,7 @@ const Playlists = props => {
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState(false)
   const history = useHistory()
+  const dispatch = useDispatch()
   const PLAYLISTS_ME_ENDPOINT = 'https://api.spotify.com/v1/me/playlists'
   const disconnect = () => {
     props.setLoggedIn(false)
@@ -26,7 +30,9 @@ const Playlists = props => {
 
   //Redirect to login if token empty
   useEffect(() => {
+    dispatch(actions.activePage.setActivePage('playlists'))
     if (token === '') {
+      disconnect()
       history.push('/')
     }
   }, [])
@@ -60,8 +66,8 @@ const Playlists = props => {
         setPlaylists([...response.data.items])
       })
       .catch(err => {
-        setIsLoading(false)
         setError(true)
+        setIsLoading(false)
         console.log(err)
       })
   }
@@ -78,8 +84,8 @@ const Playlists = props => {
     return (
       <div>
         <p>Error</p>
-        <button onClick={getPlaylists()}>Réessayer</button>
-        <button onClick={disconnect()}>Se reconnecter</button>
+        <button onClick={() => getPlaylists()}>Réessayer</button>
+        <button onClick={() => disconnect()}>Se reconnecter</button>
       </div>
     )
   }

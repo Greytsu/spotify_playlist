@@ -4,9 +4,11 @@ import styled from 'styled-components'
 import playlist_icon from '../../resources/icons/playlist.svg'
 import profile_icon from '../../resources/icons/profile.svg'
 import theme_icon from '../../resources/icons/theme.svg'
+import Selected from './selected'
 
 const Navigation = props => {
   const history = useHistory()
+
   return (
     <Navbar className='navbar'>
       <a>
@@ -17,38 +19,28 @@ const Navigation = props => {
         />
       </a>
       <a>
-        <NavIcon
-          src={playlist_icon}
-          alt='playlists'
-          onClick={() => history.push('/playlists')}
-        />
+        <Selected icon_page='playlists'>
+          <NavIcon
+            src={playlist_icon}
+            alt='playlists'
+            onClick={() => history.push('/playlists')}
+          />
+        </Selected>
       </a>
       <a>
-        <NavIcon
-          src={profile_icon}
-          alt='playlists'
-          onClick={() => history.push('/profile')}
-        />
+        <Selected icon_page='profile'>
+          <NavIcon
+            src={profile_icon}
+            alt='profile'
+            onClick={() => history.push('/profile')}
+          />
+        </Selected>
       </a>
-
-      {/* 
-        <NavLink onClick={() => history.push('/')}>Login</NavLink>
-        <NavLink onClick={() => history.push('/playlists')}>Playlists</NavLink>
-        <NavLink onClick={() => history.push('/profile')}>Profile</NavLink>
-        <NavLink onClick={() => props.themeSwitcher()}>Theme</NavLink> 
-      */}
     </Navbar>
   )
 }
 
 //Style-------------------------------------------------------------------------
-
-const NavLink = styled.div`
-  margin: 12px;
-  cursor: pointer;
-  width: auto;
-  text-align: center;
-`
 
 const Navbar = styled.nav`
   position: fixed;
@@ -57,16 +49,11 @@ const Navbar = styled.nav`
   width: 100%;
   display: flex;
   justify-content: space-around;
-  border-top: solid 1px;
   height: 5rem;
 `
 
 const NavIcon = styled.img`
-  margin: 12px;
-  cursor: pointer;
-  width: 100%;
-  text-align: center;
-  height: 80%;
+  height: 100%;
 `
 
 export default Navigation

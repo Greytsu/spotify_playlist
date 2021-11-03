@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { useHistory } from 'react-router'
 import Loader from '../components/loader'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
+import actions from '../actions'
 
 const Profile = props => {
   const [token, setToken] = useState(
@@ -17,6 +19,7 @@ const Profile = props => {
   const USER_ME_ENDPOINT = 'https://api.spotify.com/v1/me'
   const TOP_ARTISTS_ENDPOINT = 'https://api.spotify.com/v1/me/top/artists'
   const history = useHistory()
+  const dispatch = useDispatch()
   const disconnect = () => {
     props.setLoggedIn(false)
   }
@@ -28,6 +31,7 @@ const Profile = props => {
 
   //Redirect to login if token empty
   useEffect(() => {
+    dispatch(actions.activePage.setActivePage('profile'))
     if (token === '') {
       history.push('/')
     }
@@ -69,8 +73,8 @@ const Profile = props => {
         setUser(response.data)
       })
       .catch(err => {
-        setIsLoading(false)
         setError(true)
+        setIsLoading(false)
         console.log(err)
       })
   }
@@ -101,8 +105,8 @@ const Profile = props => {
     return (
       <div>
         <p>Error</p>
-        <button onClick={getUser()}>Réessayer</button>
-        <button onClick={disconnect()}>Se reconnecter</button>
+        <button onClick={() => getUser()}>Réessayer</button>
+        <button onClick={() => disconnect()}>Se reconnecter</button>
       </div>
     )
   }
