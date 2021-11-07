@@ -17,6 +17,8 @@
 
 ## 📝 Sommaire
 
+[[_TOC_]]
+
 - [Informations](#informations)
 - [Commencer](#commencer)
 - [Installation](#installation)
