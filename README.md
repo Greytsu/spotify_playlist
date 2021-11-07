@@ -11,17 +11,14 @@
 
 ---
 
-<p align="center"> Application permettant de consulter sa liste de playlist ainsi que son profile et les artistes les plus écoutés
+<p align="center"> Application permettant de consulter sa liste de playlists ainsi que son profile et les artistes les plus écoutés
     <br> 
 </p>
 
 ## 📝 Sommaire
 
-[[_TOC_]]
-
 - [Informations](#informations)
 - [Commencer](#commencer)
-- [Installation](#installation)
 - [Fonctionnalités](#fonctionnalites)
 
 ## 🧐 Informations <a name = "informations"></a>
