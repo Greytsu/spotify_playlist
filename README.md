@@ -59,7 +59,7 @@ cd spotify_playlists
 npm start
 ```
 
-### Fonctionnalités <a name = "fonctionnalites"></a>
+## Fonctionnalités <a name = "fonctionnalites"></a>
 
 - Connexion à l'API spotify
 - Consulter la liste des playlists
