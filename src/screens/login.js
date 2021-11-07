@@ -45,11 +45,11 @@ const Login = props => {
       localStorage.setItem('access_token', access_token)
       localStorage.setItem('token_type', token_type)
       localStorage.setItem('expires_in', expires_in)
-      console.log('logged')
       history.push('/playlists')
     }
   }, [])
 
+  //Page content----------------------------------------------------------------
   return (
     <Container>
       <LoginContainer>

@@ -5,6 +5,7 @@ import Loader from '../components/loader'
 import styled from 'styled-components'
 import { useDispatch, useSelector } from 'react-redux'
 import actions from '../actions'
+import Artist from '../components/artist'
 
 const Profile = props => {
   const [token, setToken] = useState(
@@ -40,7 +41,6 @@ const Profile = props => {
   //Token
   useEffect(() => {
     if (token != '') {
-      console.log(`Token : ${token}`)
       getUser()
     }
   }, [token])
@@ -54,8 +54,6 @@ const Profile = props => {
 
   //Top artists
   useEffect(() => {
-    console.log('USER', user)
-    console.log('TOP Artist', topArtists)
     if (topArtists != null) {
       setIsLoading(false)
     }
@@ -69,38 +67,40 @@ const Profile = props => {
         }
       })
       .then(response => {
-        console.log('GET Users', response)
         setUser(response.data)
       })
       .catch(err => {
         setError(true)
         setIsLoading(false)
-        console.log(err)
       })
   }
 
   const getTopArtists = () => {
     axios
       .get(TOP_ARTISTS_ENDPOINT, {
+        limit: 15,
+        time_range: 'short_term',
         headers: {
           Authorization: 'Bearer ' + token
         }
       })
       .then(response => {
-        console.log('GET artists', response.data)
-        setTopArtists(response.data)
+        setTopArtists(response.data.items)
       })
       .catch(err => {
         setIsLoading(false)
         setError(true)
-        console.log(err)
       })
   }
 
+  //Page content----------------------------------------------------------------
+
+  //Loader
   if (isLoading) {
     return <Loader />
   }
 
+  //Error
   if (error) {
     return (
       <div>
@@ -111,27 +111,50 @@ const Profile = props => {
     )
   }
 
+  //Profile
   return (
     <ProfileContainer>
-      <ProfilePic src={user.images[0]?.url} />
-      <p>{user.display_name}</p>
-      <p>Followers : {user.followers.total}</p>
+      <ProfileDetails>
+        <ProfilePic src={user.images[0]?.url} />
+        <p>{user.display_name}</p>
+        <p>Followers : {user.followers.total}</p>
+      </ProfileDetails>
+      <TopArtistsContainer>
+        <h2>Your top artists</h2>
+        {topArtists.map(artist => {
+          return <Artist artist={artist} />
+        })}
+      </TopArtistsContainer>
     </ProfileContainer>
   )
 }
 
+//Style-------------------------------------------------------------------------
+
 const ProfileContainer = styled.div`
+  padding-bottom: 5.5rem;
+`
+
+const ProfileDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 40vh;
+  padding-top: 100px;
+`
+
+const ProfilePic = styled.img`
+  height: 200px;
+  width: 200px;
+  border-radius: 150px;
+`
+
+const TopArtistsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 90vh;
-`
-
-const ProfilePic = styled.img`
-  height: 300px;
-  width: 300px;
-  border-radius: 150px;
+  margin: 10px;
 `
 
 export default Profile

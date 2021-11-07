@@ -26,11 +26,9 @@ const Routes = () => {
 
   const [currentTheme, setCurrentTheme] = useState(getStoredTheme())
   const [loggedIn, setLoggedIn] = useState(true)
-  const history = useHistory()
 
   //Switch between dark and light theme
   const switchTheme = () => {
-    console.log('switching theme')
     currentTheme.name === 'light'
       ? setCurrentTheme(darkTheme)
       : setCurrentTheme(lightTheme)

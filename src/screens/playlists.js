@@ -1,11 +1,11 @@
-import { useEffect, useState } from 'react'
+/* eslint-disable react/jsx-key */
 import axios from 'axios'
-import styled from 'styled-components'
-import Loader from '../components/loader'
-import { useHistory } from 'react-router'
+import { useEffect, useState } from 'react'
 import { useDispatch } from 'react-redux'
-import { useSelector } from 'react-redux'
+import { useHistory } from 'react-router'
+import styled from 'styled-components'
 import actions from '../actions'
+import Loader from '../components/loader'
 
 const Playlists = props => {
   const [token, setToken] = useState(
@@ -40,14 +40,12 @@ const Playlists = props => {
   //Token
   useEffect(() => {
     if (token != '') {
-      console.log(`Token : ${token}`)
       getPlaylists()
     }
   }, [token])
 
   //Playlists
   useEffect(() => {
-    console.log('Playlists', playlists)
     if (playlists.length > 0) {
       setIsLoading(false)
     }
@@ -62,13 +60,11 @@ const Playlists = props => {
         }
       })
       .then(response => {
-        console.log('GET', response.data.items)
         setPlaylists([...response.data.items])
       })
       .catch(err => {
         setError(true)
         setIsLoading(false)
-        console.log(err)
       })
   }
 
@@ -76,10 +72,14 @@ const Playlists = props => {
     history.push(`/playlistsDetails/${id}`)
   }
 
+  //Page content----------------------------------------------------------------
+
+  //Loader
   if (isLoading) {
     return <Loader />
   }
 
+  //Error
   if (error) {
     return (
       <div>
@@ -90,6 +90,7 @@ const Playlists = props => {
     )
   }
 
+  //Playlists
   return (
     <PlaylistsContainer>
       <Title>Playlists</Title>

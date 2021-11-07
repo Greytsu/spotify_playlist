@@ -5,7 +5,6 @@ import styled from 'styled-components'
 const Selected = props => {
   const result =
     useSelector(state => state.activePage.value) === props.icon_page ? 0 : 1
-  console.log(result)
 
   return useSelector(state => state.activePage.value) === props.icon_page ? (
     <Container>{props.children}</Container>

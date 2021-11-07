@@ -20,7 +20,6 @@ const PlaylistDetails = props => {
   const disconnect = () => {
     props.setLoggedIn(false)
   }
-  console.log('in')
   if (!props.loggedIn) {
     history.push('/')
   }
@@ -35,23 +34,17 @@ const PlaylistDetails = props => {
   //Token
   useEffect(() => {
     if (token != '') {
-      console.log(`Token : ${token}`)
       getPlaylist()
     }
   }, [token])
 
   //Param ID
-  useEffect(() => {
-    console.log('Playlist id :', id)
-  }, [id])
+  useEffect(() => {}, [id])
 
   //Loader wait for data
   useEffect(() => {
-    //TODO:Find a solution to keep loading while data empty
     if (playlistDetails != null) {
       setIsLoading(false)
-      console.log('Details', playlistDetails)
-      console.log('Tracks', tracks)
     }
   }, [playlistDetails])
 
@@ -63,21 +56,23 @@ const PlaylistDetails = props => {
         }
       })
       .then(response => {
-        console.log('GET', response)
         setPlaylistDetails(response.data)
         setTracks(response.data.tracks.items)
       })
       .catch(err => {
         setIsLoading(false)
         setError(true)
-        console.log(err)
       })
   }
 
+  //Page content----------------------------------------------------------------
+
+  //Loader
   if (isLoading) {
     return <Loader />
   }
 
+  //Error
   if (error) {
     return (
       <div>
@@ -88,6 +83,7 @@ const PlaylistDetails = props => {
     )
   }
 
+  //If no data
   if (!isLoading && playlistDetails == null) {
     return (
       <div>
@@ -97,6 +93,7 @@ const PlaylistDetails = props => {
     )
   }
 
+  //Playlist
   return (
     <PlaylistContainer>
       <PlaylistHeader>
@@ -106,6 +103,7 @@ const PlaylistDetails = props => {
           <PlaylistOwner>{playlistDetails.owner.display_name}</PlaylistOwner>
         </PlaylistDescription>
       </PlaylistHeader>
+
       <iframe
         src={'https://open.spotify.com/embed/playlist/' + id}
         width='100%'
@@ -114,6 +112,7 @@ const PlaylistDetails = props => {
         allowtransparency='true'
         allow='encrypted-media'
       ></iframe>
+
       <TracksContainer>
         {tracks.map(track => {
           return <Track track={track.track} />
@@ -156,13 +155,6 @@ const PlaylistOwner = styled.p`
   font-weight: normal;
   font-size: 1em;
   margin: 5px;
-  padding: 2px;
-`
-
-const PlaylistTime = styled.p`
-  font-weight: lighter;
-  font-size: 1em;
-  margin: 2px;
   padding: 2px;
 `
 
